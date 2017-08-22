@@ -1,0 +1,9 @@
+{
+  "name": "lost2017",
+  "version": "1.0.0",
+  "main": "index.html",
+  "private": true,
+  "repository": "git@github.com:mvasilkov/lost2017.git",
+  "author": "Mark Vasilkov (https://github.com/mvasilkov)",
+  "license": "MIT"
+}

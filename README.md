@@ -1,5 +1,5 @@
 # lost2017
-A video game for the [js13kGames][0] competition.
+A video game for the [js13kGames][0] competition, written in TypeScript.
 
 [0]: http://2017.js13kgames.com/
 
