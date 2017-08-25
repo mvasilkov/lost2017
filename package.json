@@ -5,5 +5,11 @@
   "private": true,
   "repository": "git@github.com:mvasilkov/lost2017.git",
   "author": "Mark Vasilkov (https://github.com/mvasilkov)",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "test": "ava"
+  },
+  "devDependencies": {
+    "ava": "^0.22.0"
+  }
 }
