@@ -26,15 +26,19 @@ function paintBody() {
 }
 
 function paintEars() {
+    const small = 0
+
     const c = _canvas.ears
     c.clearRect(0, 0, 100, 300)
 
     c.save()
     c.translate(50, 150)
     c.rotate(Math.PI * 0.5)
+    if (small) c.translate(48, 0)
 
     c.beginPath()
-    drop(c, 5, 84, 6)
+    if (small) drop(c, 5, 56, 4)
+    else drop(c, 5, 84, 6)
     c.closePath()
 
     c.restore()
@@ -58,7 +62,9 @@ function paintWhiskers(mirror) {
     for (let n = 0; n < 4; ++n) {
         c.translate(-10 * n, 0)
         c.beginPath()
-        arc(c, 3, Math.PI * (1.35 + Math.PI * 0.00444 * n * n), Math.PI * 1.65, 168 - 16 * n, 2)
+        arc(c, 3, Math.PI * (1.35 + Math.PI * 0.00444 * n * n), Math.PI * 1.65, 168 - 16 * n, 1)
+        // --- 1.65
+        // +++ (1.6 - Math.PI * 0.00333 * (4 - n) * (4 - n))
 
         c.lineWidth = 3
         c.strokeStyle = '#303030'
