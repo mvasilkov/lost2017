@@ -1,0 +1,125 @@
+canvas {
+    display: block;
+    margin: 10px;
+    outline: 1px solid #2196f3;
+}
+
+.bunny {
+    height: 200px;
+    left: 50vw;
+    position: absolute;
+    top: 50vh;
+    transform: scale(0.75);
+    width: 200px;
+}
+
+.bunny .graphic {
+    position: absolute;
+}
+
+.bunny .body {
+    /* animation: breathing 7s ease-out infinite; */
+    left: 0;
+    top: 0;
+    z-index: 2;
+}
+
+.bunny .ears {
+    /* animation: breathing-ears 7s ease-out infinite; */
+    position: absolute;
+    top: -190px;
+}
+
+.bunny .ear0 {
+    left: 10px;
+    top: 0;
+    transform: rotate(-12deg);
+    z-index: 1;
+}
+
+.bunny .ear1 {
+    left: 90px;
+    top: 0;
+    transform: rotate(12deg);
+    z-index: 1;
+}
+
+.bunny .whisker0 {
+    left: -140px;
+    top: 60px;
+    transform: rotate(-14deg);
+    z-index: 3;
+}
+
+.bunny .whisker1 {
+    left: 140px;
+    top: 60px;
+    transform: rotate(14deg);
+    z-index: 3;
+}
+
+.bunny .leg0 {
+    left: -21px;
+    top: 134px;
+    z-index: 0;
+}
+
+.bunny .leg1 {
+    left: 25px;
+    top: 154px;
+    z-index: 1;
+}
+
+.bunny .leg2 {
+    left: 75px;
+    top: 154px;
+    z-index: 1;
+}
+
+.bunny .leg3 {
+    left: 121px;
+    top: 134px;
+    z-index: 0;
+}
+
+.bunny .face {
+    left: 50px;
+    top: 50px;
+    z-index: 3;
+}
+
+@keyframes breathing {
+    0% {
+        transform: scale(0.99) translateY(0);
+    }
+
+    25% {
+        transform: scale(1.05) translateY(-4px);
+    }
+
+    60% {
+        transform: scale(0.99) translateY(0);
+    }
+
+    100% {
+        transform: scale(0.99) translateY(0);
+    }
+}
+
+@keyframes breathing-ears {
+    0% {
+        transform: translateY(0);
+    }
+
+    25% {
+        transform: translateY(-6px);
+    }
+
+    60% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
