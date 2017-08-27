@@ -41,6 +41,7 @@ function makePoints(iterations) {
     return head;
 }
 var PIPI = Math.PI * 2;
+/* Primitives */
 function arc(canvas, iterations, a0, a1, r, s) {
     var p = makePoints(iterations);
     while (p) {

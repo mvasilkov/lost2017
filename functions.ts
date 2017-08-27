@@ -56,6 +56,7 @@ function makePoints(iterations: number): LL {
 
 const PIPI = Math.PI * 2
 
+/* Primitives */
 function arc(canvas: CanvasRenderingContext2D, iterations: number, a0: number, a1: number, r: number, s: number) {
     let p = makePoints(iterations)
 

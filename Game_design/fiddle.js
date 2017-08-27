@@ -2,33 +2,10 @@ function $(id) {
     return document.getElementById(id)
 }
 
-const _canvas = {}
-
-function paintBody() {
-    const c = _canvas.body
-    c.clearRect(0, 0, 200, 200)
-
-    c.save()
-    c.translate(100, 100)
-
-    c.beginPath()
-    circle(c, 5, 84, 6)
-    c.closePath()
-
-    c.restore()
-
-    c.fillStyle = '#f4ff81'
-    c.fill()
-
-    c.lineWidth = 4
-    c.strokeStyle = '#303030'
-    c.stroke()
-}
-
 function paintEars() {
     const small = 0
 
-    const c = _canvas.ears
+    const c = getCanvas(100, 300)
     c.clearRect(0, 0, 100, 300)
 
     c.save()
@@ -52,8 +29,8 @@ function paintEars() {
 }
 
 function paintWhiskers(mirror) {
-    const c = _canvas.whiskers
-    c.clearRect(0, 0, 200, 200)
+    const c = getCanvas(200, 150)
+    c.clearRect(0, 0, 200, 150)
 
     c.save()
     c.translate(100, 200)
@@ -75,7 +52,7 @@ function paintWhiskers(mirror) {
 }
 
 function paintLegs() {
-    const c = _canvas.legs
+    const c = getCanvas(100, 100)
     c.clearRect(0, 0, 100, 100)
 
     c.save()
@@ -95,53 +72,12 @@ function paintLegs() {
     c.stroke()
 }
 
-function paintFace() {
-    const c = _canvas.face
-    c.clearRect(0, 0, 100, 100)
-
-    const a = 25
-    const b = 70
-
-    c.beginPath()
-    c.arc(20, a, 8, 0, Math.PI * 2)
-    c.fillStyle = '#303030'
-    c.fill()
-
-    c.beginPath()
-    c.arc(18, a - 2, 2, 0, Math.PI * 2)
-    c.fillStyle = '#fbfbfb'
-    c.fill()
-
-    c.beginPath()
-    c.arc(80, a, 8, 0, Math.PI * 2)
-    c.fillStyle = '#303030'
-    c.fill()
-
-    c.beginPath()
-    c.arc(78, a - 2, 2, 0, Math.PI * 2)
-    c.fillStyle = '#fbfbfb'
-    c.fill()
-
-    c.beginPath()
-    c.arc(60 - 1, b, 10, Math.PI * 0.1, Math.PI * 0.8)
-    c.arc(40 + 1, b, 10, Math.PI * 0.2, Math.PI * 0.9)
-    
-    c.lineWidth = 4
-    c.strokeStyle = '#303030'
-    c.stroke()
-}
-
-for (let name of ['body', 'ears', 'legs', 'whiskers', 'face']) {
-    const htmlCanvas = _canvas['html' + name] = $('c-' + name)
-    _canvas[name] = htmlCanvas.getContext('2d')
-}
-
 function makeBunny(parent) {
     const bunny = document.createElement('div')
     bunny.className = 'bunny'
 
-    paintBody()
-    const body = createGraphic(_canvas.htmlbody, 'body')
+    paint(200, 200, paintBody, { color: '#f4ff81', lineColor: '#303030' })
+    const body = createGraphic(getCanvasTag(200, 200), 'body')
     bunny.appendChild(body)
 
     const ears = document.createElement('div')
@@ -149,39 +85,39 @@ function makeBunny(parent) {
     bunny.appendChild(ears)
 
     paintEars()
-    const ear0 = createGraphic(_canvas.htmlears, 'ear0')
+    const ear0 = createGraphic(getCanvasTag(100, 300), 'ear0')
     ears.appendChild(ear0)
 
     paintEars()
-    const ear1 = createGraphic(_canvas.htmlears, 'ear1')
+    const ear1 = createGraphic(getCanvasTag(100, 300), 'ear1')
     ears.appendChild(ear1)
 
     paintWhiskers(true)
-    const whisker0 = createGraphic(_canvas.htmlwhiskers, 'whisker0')
+    const whisker0 = createGraphic(getCanvasTag(200, 150), 'whisker0')
     bunny.appendChild(whisker0)
 
     paintWhiskers(false)
-    const whisker1 = createGraphic(_canvas.htmlwhiskers, 'whisker1')
+    const whisker1 = createGraphic(getCanvasTag(200, 150), 'whisker1')
     bunny.appendChild(whisker1)
 
     paintLegs()
-    const leg0 = createGraphic(_canvas.htmllegs, 'leg0')
+    const leg0 = createGraphic(getCanvasTag(100, 100), 'leg0')
     bunny.appendChild(leg0)
 
     paintLegs()
-    const leg1 = createGraphic(_canvas.htmllegs, 'leg1')
+    const leg1 = createGraphic(getCanvasTag(100, 100), 'leg1')
     bunny.appendChild(leg1)
 
     paintLegs()
-    const leg2 = createGraphic(_canvas.htmllegs, 'leg2')
+    const leg2 = createGraphic(getCanvasTag(100, 100), 'leg2')
     bunny.appendChild(leg2)
 
     paintLegs()
-    const leg3 = createGraphic(_canvas.htmllegs, 'leg3')
+    const leg3 = createGraphic(getCanvasTag(100, 100), 'leg3')
     bunny.appendChild(leg3)
 
-    paintFace()
-    const face = createGraphic(_canvas.htmlface, 'face')
+    paint(100, 100, paintFace, { lineColor: '#303030', glareColor: '#fbfbfb' })
+    const face = createGraphic(getCanvasTag(100, 100), 'face')
     bunny.appendChild(face)
 
     parent.appendChild(bunny)
