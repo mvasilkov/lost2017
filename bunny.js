@@ -35,24 +35,30 @@ function getCanvasTag(width, height) {
     return _canvasTagCache[index];
 }
 /* Paint */
-function paint(width, height, callback, options) {
-    var c = getCanvas(width, height);
-    c.clearRect(0, 0, width, height);
-    c.save();
-    callback(c, options);
-    c.restore();
+function paint(callback, options) {
+    var width = callback.width, height = callback.height;
+    var canvas = getCanvas(width, height);
+    canvas.clearRect(0, 0, width, height);
+    canvas.save();
+    callback(canvas, options);
+    canvas.restore();
+    if (callback.standardDraw) {
+        canvas.closePath();
+        canvas.fillStyle = options.color;
+        canvas.fill();
+        canvas.lineWidth = 4;
+        canvas.strokeStyle = options.lineColor;
+        canvas.stroke();
+    }
+    return getCanvasTag(width, height);
 }
-function paintBody(canvas, options) {
+var paintBody = function paintBody(canvas, options) {
     canvas.translate(100, 100);
     canvas.beginPath();
     circle(canvas, 5, 84, 6);
-    canvas.closePath();
-    canvas.fillStyle = options.color;
-    canvas.fill();
-    canvas.lineWidth = 4;
-    canvas.strokeStyle = options.lineColor;
-    canvas.stroke();
-}
+};
+paintBody.width = paintBody.height = 200;
+paintBody.standardDraw = true;
 function paintEyes(canvas, x, options) {
     canvas.beginPath();
     canvas.arc(x, 25, 8, 0, PIPI);
@@ -63,7 +69,7 @@ function paintEyes(canvas, x, options) {
     canvas.fillStyle = options.glareColor;
     canvas.fill();
 }
-function paintFace(canvas, options) {
+var paintFace = function paintFace(canvas, options) {
     paintEyes(canvas, 20, options);
     paintEyes(canvas, 80, options);
     canvas.beginPath();
@@ -72,4 +78,42 @@ function paintFace(canvas, options) {
     canvas.lineWidth = 4;
     canvas.strokeStyle = options.lineColor;
     canvas.stroke();
-}
+};
+paintFace.width = paintFace.height = 100;
+var paintEars = function paintEars(canvas, options) {
+    canvas.translate(50, 150);
+    canvas.rotate(Math.PI * 0.5);
+    if (options.small)
+        canvas.translate(48, 0);
+    canvas.beginPath();
+    if (options.small)
+        drop(canvas, 5, 56, 4);
+    else
+        drop(canvas, 5, 84, 6);
+};
+paintEars.width = 100;
+paintEars.height = 300;
+paintEars.standardDraw = true;
+var paintWhiskers = function paintWhiskers(canvas, options) {
+    canvas.translate(100, 200);
+    if (options.mirror)
+        canvas.scale(-1, 1);
+    for (var n = 0; n < 4; ++n) {
+        canvas.translate(-10 * n, 0);
+        canvas.beginPath();
+        var k = options.small ? (1.6 - Math.PI * 0.00333 * (4 - n) * (4 - n)) : 1.65;
+        arc(canvas, 3, Math.PI * (1.35 + Math.PI * 0.00444 * n * n), Math.PI * k, 168 - 16 * n, 1);
+        canvas.lineWidth = 2;
+        canvas.strokeStyle = options.lineColor;
+        canvas.stroke();
+    }
+};
+paintWhiskers.width = 200;
+paintWhiskers.height = 150;
+var paintLegs = function paintLegs(canvas, options) {
+    canvas.translate(50, 50);
+    canvas.beginPath();
+    circle(canvas, 4, 25, 2);
+};
+paintLegs.width = paintLegs.height = 100;
+paintLegs.standardDraw = true;

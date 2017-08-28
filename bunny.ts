@@ -46,34 +46,49 @@ interface PaintOptions {
     lineColor?: string,
     glareColor?: string,
     small?: boolean,
+    mirror?: boolean,
 }
 
-type PaintCallback = (canvas: CanvasRenderingContext2D, options: PaintOptions) => void
+interface PaintCallback {
+    (canvas: CanvasRenderingContext2D, options: PaintOptions): void
+
+    width?: number
+    height?: number
+    standardDraw?: boolean
+}
 
 /* Paint */
-function paint(width: number, height: number, callback: PaintCallback, options: PaintOptions) {
-    const c = getCanvas(width, height)
-    c.clearRect(0, 0, width, height)
+function paint(callback: PaintCallback, options: PaintOptions) {
+    const { width, height } = callback
+    const canvas = getCanvas(width as number, height as number)
+    canvas.clearRect(0, 0, width as number, height as number)
 
-    c.save()
-    callback(c, options)
-    c.restore()
+    canvas.save()
+    callback(canvas, options)
+    canvas.restore()
+
+    if (callback.standardDraw) {
+        canvas.closePath()
+
+        canvas.fillStyle = options.color as string
+        canvas.fill()
+
+        canvas.lineWidth = 4
+        canvas.strokeStyle = options.lineColor as string
+        canvas.stroke()
+    }
+
+    return getCanvasTag(width as number, height as number)
 }
 
-function paintBody(canvas: CanvasRenderingContext2D, options: PaintOptions) {
+const paintBody: PaintCallback = function paintBody(canvas: CanvasRenderingContext2D, options: PaintOptions) {
     canvas.translate(100, 100)
 
     canvas.beginPath()
     circle(canvas, 5, 84, 6)
-    canvas.closePath()
-
-    canvas.fillStyle = options.color as string
-    canvas.fill()
-
-    canvas.lineWidth = 4
-    canvas.strokeStyle = options.lineColor as string
-    canvas.stroke()
 }
+paintBody.width = paintBody.height = 200
+paintBody.standardDraw = true
 
 function paintEyes(canvas: CanvasRenderingContext2D, x: number, options: PaintOptions) {
     canvas.beginPath()
@@ -87,7 +102,7 @@ function paintEyes(canvas: CanvasRenderingContext2D, x: number, options: PaintOp
     canvas.fill()
 }
 
-function paintFace(canvas: CanvasRenderingContext2D, options: PaintOptions) {
+const paintFace: PaintCallback = function paintFace(canvas: CanvasRenderingContext2D, options: PaintOptions) {
     paintEyes(canvas, 20, options)
     paintEyes(canvas, 80, options)
 
@@ -99,3 +114,45 @@ function paintFace(canvas: CanvasRenderingContext2D, options: PaintOptions) {
     canvas.strokeStyle = options.lineColor as string
     canvas.stroke()
 }
+paintFace.width = paintFace.height = 100
+
+const paintEars: PaintCallback = function paintEars(canvas: CanvasRenderingContext2D, options: PaintOptions) {
+    canvas.translate(50, 150)
+    canvas.rotate(Math.PI * 0.5)
+    if (options.small) canvas.translate(48, 0)
+
+    canvas.beginPath()
+    if (options.small) drop(canvas, 5, 56, 4)
+    else drop(canvas, 5, 84, 6)
+}
+paintEars.width = 100
+paintEars.height = 300
+paintEars.standardDraw = true
+
+const paintWhiskers: PaintCallback = function paintWhiskers(canvas: CanvasRenderingContext2D, options: PaintOptions) {
+    canvas.translate(100, 200)
+    if (options.mirror) canvas.scale(-1, 1)
+
+    for (let n = 0; n < 4; ++n) {
+        canvas.translate(-10 * n, 0)
+        canvas.beginPath()
+
+        const k = options.small ? (1.6 - Math.PI * 0.00333 * (4 - n) * (4 - n)) : 1.65
+        arc(canvas, 3, Math.PI * (1.35 + Math.PI * 0.00444 * n * n), Math.PI * k, 168 - 16 * n, 1)
+
+        canvas.lineWidth = 2
+        canvas.strokeStyle = options.lineColor as string
+        canvas.stroke()
+    }
+}
+paintWhiskers.width = 200
+paintWhiskers.height = 150
+
+const paintLegs: PaintCallback = function paintLegs(canvas: CanvasRenderingContext2D, options: PaintOptions) {
+    canvas.translate(50, 50)
+
+    canvas.beginPath()
+    circle(canvas, 4, 25, 2)
+}
+paintLegs.width = paintLegs.height = 100
+paintLegs.standardDraw = true
